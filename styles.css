@@ -7,7 +7,7 @@
 @import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap');
 
 :root {
-  /* Palette unique — sans rapport avec propentatech */
+  /* Palette Dark mode par défaut */
   --bg:          #080e1a;          /* Fond nuit profond */
   --bg-2:        #0d1629;          /* Surfaces secondaires */
   --bg-3:        #111d35;          /* Cartes */
@@ -35,11 +35,52 @@
 
   --shadow-card: 0 8px 32px rgba(0,0,0,0.4);
   --shadow-glow: 0 0 60px rgba(249,115,22,0.15);
-  --glass: rgba(255,255,255,0.04);
+  --glass:       rgba(255,255,255,0.04);
   --glass-border: rgba(255,255,255,0.08);
+
+  --header-bg:   rgba(8,14,26,0.85);
+  --float-card-bg: rgba(13,22,41,0.9);
+  --float-card-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  --pill-bg:     rgba(8,14,26,0.85);
+  --hero-glow-1: rgba(30,58,95,0.5);
+  --hero-glow-2: rgba(30,58,95,0.3);
 
   --font-display: 'Clash Display', 'Segoe UI', sans-serif;
   --font-body:    'Satoshi', 'Inter', sans-serif;
+}
+
+/* ── Thème Clair Moderne & Épuré ──────────────────────────────── */
+[data-theme="light"] {
+  --bg:          #f8fafc;          /* Fond doux et lumineux (slate 50) */
+  --bg-2:        #ffffff;          /* Surfaces blanches */
+  --bg-3:        #ffffff;          /* Cartes blanches nettes */
+  --bg-4:        #f1f5f9;          /* Hover surfaces légères (slate 100) */
+  --border:      rgba(15, 23, 42, 0.08);
+  --border-2:    rgba(15, 23, 42, 0.14);
+
+  --navy:        #1e3a5f;          /* Bleu nuit élégant conservé */
+  --navy-light:  #2563eb;
+  --accent:      #ea580c;          /* Orange signature avec contraste accru */
+  --accent-2:    #f97316;
+  --accent-glow: rgba(234, 88, 12, 0.2);
+  --gold:        #d97706;
+
+  --text:        #1e293b;          /* Texte principal très lisible (slate 800) */
+  --text-2:      #475569;          /* Texte secondaire équilibré (slate 600) */
+  --text-3:      #64748b;          /* Texte tertiaire (slate 500) */
+  --white:       #0f172a;          /* Titres à fort contraste (slate 900) */
+
+  --shadow-card: 0 10px 30px -5px rgba(15, 23, 42, 0.06), 0 4px 10px -3px rgba(15, 23, 42, 0.03);
+  --shadow-glow: 0 0 40px rgba(234, 88, 12, 0.12);
+  --glass:       rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(15, 23, 42, 0.08);
+
+  --header-bg:   rgba(248, 250, 252, 0.88);
+  --float-card-bg: rgba(255, 255, 255, 0.95);
+  --float-card-shadow: 0 14px 32px rgba(15, 23, 42, 0.12);
+  --pill-bg:     rgba(255, 255, 255, 0.94);
+  --hero-glow-1: rgba(249, 115, 22, 0.08);
+  --hero-glow-2: rgba(37, 99, 235, 0.06);
 }
 
 /* ── Reset ───────────────────────────────────────────────────── */
@@ -49,6 +90,10 @@ html {
   scroll-behavior: smooth;
   font-size: 106.25%;
   color-scheme: dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
 }
 
 body {
@@ -119,10 +164,11 @@ h4 { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.06em; text-transform
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(8,14,26,0.85);
+  background: var(--header-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .site-header-bar {
@@ -244,6 +290,52 @@ h4 { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.06em; text-transform
 
 @media (min-width: 64rem) { .menu-trigger { display: none !important; } }
 
+/* ── Theme Switcher Button ──────────────────────────────────── */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  background: var(--glass);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(249, 115, 22, 0.1);
+  transform: translateY(-2px);
+}
+
+.theme-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+[data-theme="light"] .theme-toggle .theme-toggle-icon--sun {
+  display: none !important;
+}
+[data-theme="light"] .theme-toggle .theme-toggle-icon--moon {
+  display: inline-flex !important;
+}
+
+:root:not([data-theme="light"]) .theme-toggle .theme-toggle-icon--sun {
+  display: inline-flex !important;
+}
+:root:not([data-theme="light"]) .theme-toggle .theme-toggle-icon--moon {
+  display: none !important;
+}
+
 .mobile-nav {
   display: none;
   border-top: 1px solid var(--border);
@@ -326,9 +418,9 @@ h4 { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.06em; text-transform
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(30,58,95,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 70% 40%, var(--hero-glow-1) 0%, transparent 70%),
     radial-gradient(ellipse 50% 40% at 20% 80%, rgba(249,115,22,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 50% at 80% 90%, rgba(30,58,95,0.3) 0%, transparent 60%);
+    radial-gradient(ellipse 40% 50% at 80% 90%, var(--hero-glow-2) 0%, transparent 60%);
   z-index: 0;
 }
 
@@ -436,13 +528,13 @@ h4 { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.06em; text-transform
 .float-card {
   position: absolute;
   z-index: 10;
-  background: rgba(13,22,41,0.9);
+  background: var(--float-card-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-2);
   border-radius: var(--radius-md);
   padding: 0.65rem 0.85rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  box-shadow: var(--float-card-shadow);
   pointer-events: none;
 }
 
@@ -589,7 +681,7 @@ h4 { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.06em; text-transform
 .pill {
   position: absolute;
   left: 1rem; top: 1rem;
-  background: rgba(8,14,26,0.85);
+  background: var(--pill-bg);
   backdrop-filter: blur(8px);
   color: var(--accent);
   border: 1px solid rgba(249,115,22,0.3);

@@ -51,6 +51,28 @@ backToTopBtn?.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+// ── Theme Switcher ──────────────────────────────────────────
+const themeToggleBtn = document.querySelector<HTMLButtonElement>('#theme-toggle');
+const updateThemeAria = (theme: string): void => {
+  if (!themeToggleBtn) return;
+  const isLight = theme === 'light';
+  themeToggleBtn.setAttribute('aria-label', isLight ? 'Passer au thème sombre' : 'Passer au thème clair');
+  themeToggleBtn.setAttribute('title', isLight ? 'Passer au thème sombre' : 'Passer au thème clair');
+};
+
+const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+updateThemeAria(currentTheme);
+
+themeToggleBtn?.addEventListener('click', () => {
+  const activeTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  const newTheme = activeTheme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  try {
+    localStorage.setItem('theme', newTheme);
+  } catch (_) {}
+  updateThemeAria(newTheme);
+});
+
 // ── Mobile menu ───────────────────────────────────────────────
 const menuBtn = document.querySelector<HTMLButtonElement>('.menu-trigger');
 const mobileNav = document.querySelector<HTMLElement>('.mobile-nav');
